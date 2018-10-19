@@ -8,8 +8,19 @@ public class script : MonoBehaviour {
     public float maxSteeringAngle; // maximum steer angle the wheel can have
 
     public static readonly float MAX_EULER = 360;
+    public static readonly float MOTOR_TORQUE_MULTIPLIER = 30;
 
     int i = 0;
+
+    public void Start()
+    {
+        foreach (AxleInfo axleInfo in axleInfos)
+        {
+            axleInfo.leftWheel.ConfigureVehicleSubsteps(1, 12, 15);
+            axleInfo.rightWheel.ConfigureVehicleSubsteps(1, 12, 15);
+        }
+    }
+
 
     public void FixedUpdate()
     {
@@ -25,7 +36,7 @@ public class script : MonoBehaviour {
         if (steering == 0.0)
         {
             //zRot = Mathf.MoveTowards(zRot, 0, 10 * Time.fixedDeltaTime);
-            zRot = StabilizeEuler(zRot, 10 * Time.fixedDeltaTime);
+            zRot = StabilizeEuler(zRot, 20 * Time.fixedDeltaTime);
         }
         Debug.Log(zRot + " " + i++);
         transform.eulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, zRot);
